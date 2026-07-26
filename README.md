@@ -46,7 +46,7 @@ You can run tracking directly from your terminal or install it as a library in a
 
 ```bash
 # Live tracking
-npx track-post CL640612152IN
+npx track-post <tracking-id>
 
 # Demo mode (sample parcel data)
 npx track-post EH123456789IN --demo
@@ -124,7 +124,7 @@ To publish updates to the `track-post` package on npm:
 
 4. **Test your published package**:
    ```bash
-   npx track-post CL640612152IN
+   npx track-post <tracking-id>
    ```
 
 ---
@@ -323,61 +323,31 @@ GET /v1/api/track/:code
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `code` | `string` | ✅ | 13-character India Post consignment ID (e.g. `CL640612152IN`) |
+| `code` | `string` | ✅ | 13-character India Post consignment ID (e.g. `<tracking-id>`) |
 
 #### Plain JSON Response
 
 ```bash
-curl https://your-deployment.vercel.app/v1/api/track/CL640612152IN
+curl https://your-deployment.vercel.app/v1/api/track/<tracking-id>
 ```
 
 ```json
 {
-  "id": "CL640612152IN",
-  "status": "Delivered",
-  "origin": "Puthiyara SO",
-  "destination": "Etukuru Road(Guntur) S.O",
-  "category": "PARCEL",
-  "booking_date": "2026-05-04",
-  "pincode": "522003",
-  "tariff": "42",
+  "id": "YourTrackId",
+  "status": "status",
+  "origin": "mumbai",
+  "destination": "new-delhi",
   "weight": "458 g",
+  "tariff": "42",
   "delivered": true,
-  "delivery_date": "2026-05-07T15:48:21Z",
   "events": [
     {
-      "date": "2026-05-07T15:48:21Z",
-      "office": "IDC Kothapet",
-      "description": "Item Delivered(Addressee)",
+      "date": "2024-01-01T12:30:45Z",
+      "office": "mumbai",
+      "description": "descriptionofscan",
       "status": "DELIVERED"
-    },
-    {
-      "date": "2026-05-07T09:45:45Z",
-      "office": "IDC Kothapet",
-      "description": "Taken out for delivery",
-      "status": "OUT_FOR_DELIVERY"
-    },
-    {
-      "date": "2026-05-07T07:22:16Z",
-      "office": "Etukuru Road(Guntur) S.O",
-      "description": "Item received at Destination",
-      "status": "RECEIVED"
-    },
-    {
-      "date": "2026-05-06T16:00:23Z",
-      "office": "Vijayawada PH",
-      "description": "Item Dispatched",
-      "status": "DISPATCHED"
-    },
-    {
-      "date": "2026-05-04T12:00:18Z",
-      "office": "Puthiyara SO",
-      "description": "Item Booked",
-      "status": "BOOKED"
     }
-  ],
-  "source": "LIVE_INDIAPOST_GOV",
-  "fetched_at": "2026-07-26T11:08:07.117Z"
+  ]
 }
 ```
 
@@ -407,14 +377,6 @@ curl https://your-deployment.vercel.app/v1/api/track/CL640612152IN
 | Encryption | CryptoJS (AES-256) |
 | CLI & NPM Package | Node.js Native HTTPS / FS (Zero Third-Party Deps) |
 | Deployment | Vercel (Serverless Functions) |
-
----
-
-## ⚖️ Disclaimer
-
-> [!NOTE]  
-> This project (`track-post` and India Post Tracker) is an **unofficial open-source developer tool** created for educational and tracking interoperability purposes.  
-> It is **not affiliated with, endorsed by, or connected to** India Post, the Department of Posts, or the Government of India. All product names, trademarks, and registered trademarks are the property of their respective owners.
 
 ---
 
