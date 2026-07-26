@@ -1,0 +1,24 @@
+# Dependencies
+node_modules
+.pnpm-store
+
+# Environment variables (Secrets & Admin Credentials)
+.env
+.env.local
+.env.*.local
+
+# Build output
+dist
+dist-ssr
+*.local
+
+# IDE & OS
+.vscode
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+Thumbs.db

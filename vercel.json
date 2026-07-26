@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "rewrites": [
+    { "source": "/v1/api/track/:code", "destination": "/api/track?code=:code" },
+    { "source": "/api/v1/track/:code", "destination": "/api/track?code=:code" },
+    { "source": "/track/:code", "destination": "/api/track?code=:code" },
+    { "source": "/api/indiapost", "destination": "/api/indiapost" },
+    { "source": "/api/indiapost/(.*)", "destination": "/api/indiapost" },
+    { "source": "/((?!api|v1/api|track|.*\\..*).*)", "destination": "/index.html" }
+  ]
+}

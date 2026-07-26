@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>India Post Tracker - Live JSON & Tracking Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --accent: #ec4899;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 850px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    header h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      background: linear-gradient(to right, #818cf8, #c084fc, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 1rem;
+    }
+
+    .search-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 1rem;
+      padding: 1.75rem;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+      margin-bottom: 2rem;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .input-group input[type="text"] {
+      flex: 1;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 0.75rem;
+      padding: 0.875rem 1.25rem;
+      color: #fff;
+      font-size: 1rem;
+      font-family: 'Fira Code', monospace;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .input-group input[type="text"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+    }
+
+    .btn {
+      background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+      color: white;
+      font-weight: 600;
+      padding: 0.875rem 1.5rem;
+      border: none;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .options-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+
+    .sample-tags {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .sample-tag {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 0.25rem 0.6rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.8rem;
+      color: #cbd5e1;
+      transition: background 0.2s;
+    }
+
+    .sample-tag:hover {
+      background: rgba(99, 102, 241, 0.25);
+      color: #fff;
+    }
+
+    /* Results Section */
+    .results-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 1rem;
+      padding: 1.75rem;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+      display: none;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 1rem;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: rgba(99, 102, 241, 0.2);
+      color: var(--primary);
+    }
+
+    /* Key Details Grid */
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .detail-item {
+      background: rgba(15, 23, 42, 0.6);
+      padding: 1rem;
+      border-radius: 0.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .detail-item .label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .detail-item .value {
+      font-weight: 600;
+      font-size: 1.05rem;
+      color: #fff;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .badge-delivered {
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+
+    .badge-transit {
+      background: rgba(245, 158, 11, 0.2);
+      color: var(--warning);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+
+    /* Timeline */
+    .timeline {
+      position: relative;
+      padding-left: 1.5rem;
+      border-left: 2px solid rgba(99, 102, 241, 0.3);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -1.95rem;
+      top: 0.25rem;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--primary);
+      box-shadow: 0 0 10px var(--primary);
+    }
+
+    .timeline-item .date {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-family: 'Fira Code', monospace;
+      margin-bottom: 0.25rem;
+    }
+
+    .timeline-item .office {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .timeline-item .desc {
+      font-size: 0.9rem;
+      color: #cbd5e1;
+    }
+
+    /* JSON Box */
+    pre.json-view {
+      background: #090d16;
+      padding: 1.25rem;
+      border-radius: 0.75rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      color: #38bdf8;
+      overflow-x: auto;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      max-height: 450px;
+    }
+
+    /* Spinner */
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .alert {
+      padding: 1rem;
+      border-radius: 0.75rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    .alert-danger {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #fca5a5;
+    }
+
+    .alert-info {
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #a5b4fc;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📦 India Post Consignment Tracker</h1>
+      <p>Live JSON API & Consignment Tracking Portal</p>
+    </header>
+
+    <div class="search-card">
+      <form id="trackForm">
+        <div class="input-group">
+          <input type="text" id="trackId" placeholder="Enter Tracking Code..." required autocomplete="off" />
+          <button type="submit" class="btn" id="submitBtn">
+            <span id="btnText">Track Package</span>
+            <div id="btnSpinner" class="spinner" style="display: none;"></div>
+          </button>
+        </div>
+        <div class="options-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="intlCheck">
+            International Package
+          </label>
+        </div>
+      </form>
+    </div>
+
+    <div id="resultsCard" class="results-card">
+      <div class="tabs">
+        <button class="tab-btn active" id="tabVisual" onclick="switchTab('visual')">Visual Status</button>
+        <button class="tab-btn" id="tabJson" onclick="switchTab('json')">JSON Response</button>
+      </div>
+
+      <div id="errorAlert" class="alert alert-danger" style="display: none;"></div>
+      <div id="infoAlert" class="alert alert-info" style="display: none;"></div>
+
+      <div id="visualTabContent">
+        <div class="details-grid" id="detailsGrid">
+          <!-- Dynamic details injected here -->
+        </div>
+        <h3 style="margin-bottom: 1rem; font-size: 1.1rem; color: #cbd5e1;">Tracking Events Timeline</h3>
+        <div class="timeline" id="timelineList">
+          <!-- Dynamic events injected here -->
+        </div>
+      </div>
+
+      <div id="jsonTabContent" style="display: none;">
+        <pre class="json-view" id="jsonOutput">// JSON response will appear here...</pre>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentData = null;
+
+    function setSample(code, isIntl) {
+      document.getElementById('trackId').value = code;
+      document.getElementById('intlCheck').checked = isIntl;
+    }
+
+    function switchTab(tab) {
+      const visualBtn = document.getElementById('tabVisual');
+      const jsonBtn = document.getElementById('tabJson');
+      const visualContent = document.getElementById('visualTabContent');
+      const jsonContent = document.getElementById('jsonTabContent');
+
+      if (tab === 'visual') {
+        visualBtn.classList.add('active');
+        jsonBtn.classList.remove('active');
+        visualContent.style.display = 'block';
+        jsonContent.style.display = 'none';
+      } else {
+        jsonBtn.classList.add('active');
+        visualBtn.classList.remove('active');
+        visualContent.style.display = 'none';
+        jsonContent.style.display = 'block';
+      }
+    }
+
+    document.getElementById('trackForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const trackId = document.getElementById('trackId').value.trim();
+      const isIntl = document.getElementById('intlCheck').checked;
+
+      if (!trackId) return;
+
+      const submitBtn = document.getElementById('submitBtn');
+      const btnText = document.getElementById('btnText');
+      const btnSpinner = document.getElementById('btnSpinner');
+      const resultsCard = document.getElementById('resultsCard');
+      const errorAlert = document.getElementById('errorAlert');
+      const infoAlert = document.getElementById('infoAlert');
+
+      // Reset state
+      submitBtn.disabled = true;
+      btnText.textContent = 'Tracking...';
+      btnSpinner.style.display = 'inline-block';
+      resultsCard.style.display = 'block';
+      errorAlert.style.display = 'none';
+      infoAlert.style.display = 'none';
+
+      const url = `/track/${encodeURIComponent(trackId)}${isIntl ? '?international=1' : ''}`;
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        document.getElementById('jsonOutput').textContent = JSON.stringify(data, null, 4);
+
+        if (!response.ok) {
+          showError(data.error || `Tracking code not found (${response.status})`);
+          return;
+        }
+        currentData = data;
+        renderData(data);
+      } catch (err) {
+        console.warn("API request error:", err);
+        showError(err.message || 'Failed to connect to tracking API.');
+      } finally {
+        submitBtn.disabled = false;
+        btnText.textContent = 'Track Package';
+        btnSpinner.style.display = 'none';
+      }
+
+    });
+
+    function renderData(data) {
+      document.getElementById('jsonOutput').textContent = JSON.stringify(data, null, 4);
+
+      const grid = document.getElementById('detailsGrid');
+      grid.innerHTML = `
+        <div class="detail-item">
+          <div class="label">Consignment ID</div>
+          <div class="value">${data.id || 'N/A'}</div>
+        </div>
+        <div class="detail-item">
+          <div class="label">Status</div>
+          <div class="value">
+            ${data.delivered ? '<span class="badge badge-delivered">Delivered</span>' : '<span class="badge badge-transit">In Transit</span>'}
+          </div>
+        </div>
+        <div class="detail-item">
+          <div class="label">Origin</div>
+          <div class="value">${data.origin || data.origin_country || 'N/A'}</div>
+        </div>
+        <div class="detail-item">
+          <div class="label">Destination</div>
+          <div class="value">${data.destination || data.destination_country || 'N/A'}</div>
+        </div>
+        <div class="detail-item">
+          <div class="label">Category</div>
+          <div class="value">${data.category || 'Standard'}</div>
+        </div>
+        <div class="detail-item">
+          <div class="label">Pincode / Tariff</div>
+          <div class="value">${data.pincode ? data.pincode + ' (' + (data.tariff || 'N/A') + ')' : 'N/A'}</div>
+        </div>
+      `;
+
+      const timeline = document.getElementById('timelineList');
+      if (data.events && data.events.length > 0) {
+        timeline.innerHTML = data.events.map(ev => `
+          <div class="timeline-item">
+            <div class="date">${ev.date ? new Date(ev.date).toLocaleString() : (ev.time || 'N/A')}</div>
+            <div class="office">${ev.office || ev.location || 'Postal Office'}</div>
+            <div class="desc">${ev.description || ev.type || 'Event processed'}</div>
+          </div>
+        `).join('');
+      } else {
+        timeline.innerHTML = '<p style="color: var(--text-muted);">No tracking timeline events recorded yet.</p>';
+      }
+    }
+
+    function showError(msg) {
+      const errorAlert = document.getElementById('errorAlert');
+      errorAlert.textContent = msg;
+      errorAlert.style.display = 'block';
+
+      document.getElementById('detailsGrid').innerHTML = '';
+      document.getElementById('timelineList').innerHTML = '';
+      document.getElementById('jsonOutput').textContent = JSON.stringify({ error: msg }, null, 4);
+    }
+  </script>
+</body>
+</html>
