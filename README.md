@@ -100,34 +100,6 @@ export async function getTrackingDetails(consignmentId: string): Promise<Trackin
 }
 ```
 
----
-
-## 📤 How to Publish `track-post` to NPM
-
-To publish updates to the `track-post` package on npm:
-
-1. **Navigate to the `npm` directory**:
-   ```bash
-   cd npm
-   ```
-
-2. **Log in to your NPM account**:
-   ```bash
-   npm login
-   ```
-   *(Enter your npm username, password, and email/OTP)*
-
-3. **Publish the package**:
-   ```bash
-   npm publish --access public
-   ```
-
-4. **Test your published package**:
-   ```bash
-   npx track-post <tracking-id>
-   ```
-
----
 
 ## ✨ Features
 
