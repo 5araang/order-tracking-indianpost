@@ -404,7 +404,7 @@ This tracker was born from a real frustration with India Post's clunky official 
 | 📸 **Instagram** | [@5araang](https://instagram.com/5araang) |
 | 💻 **GitHub Profile** | [@5araang](https://github.com/5araang) |
 | 📦 **NPM Package** | [track-post](https://www.npmjs.com/package/track-post) |
-| 📁 **This Repository** | [indian-post-track-order-](https://github.com/5araang/indian-post-track-order-) |
+| 📁 **This Repository** | [indian-post-track-order-](https://github.com/5araang/order-tracking-indianpost) |
 
 > *"Ship fast. Break nothing. Track everything."*  
 > — Sarang
